@@ -2,8 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import Button from "../../components/Button";
 import Input from "../../components/Input";
-import Modal from "../../components/Modal";
-import TaskForm from "./components/TaskForm";
 import TaskFormModal from "./components/TaskFormModal";
 import TodoItem from "./components/TodoItem";
 
@@ -41,7 +39,7 @@ function TodoList({ className }) {
       </div>
       <div className="bulk-actions">
         <span>Bulk Action:</span>
-        <Button>Remove</Button>
+        <Button className="bg-red">Remove</Button>
       </div>
     </div>
   );
@@ -83,7 +81,15 @@ export default styled(TodoList)`
     margin-top: auto;
     background-color: #eee;
     height: 100px;
+    padding: 16px;
     border-top: 1px solid;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    button {
+      width: min-content;
+    }
   }
 
   @media screen and (min-width: 640px) {
