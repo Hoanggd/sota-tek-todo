@@ -13,4 +13,8 @@ function NewTask({ className }) {
 
 export default styled(NewTask)`
   padding: 40px;
+  h2 {
+    text-align: center;
+    margin: 0 0 50px;
+  }
 `;

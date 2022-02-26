@@ -24,12 +24,6 @@ export default styled(Home)`
   height: 100vh;
   overflow-y: auto;
 
-  h2 {
-    text-align: center;
-    margin-top: 0;
-    margin-bottom: 50px;
-  }
-
   .new-task {
     flex: 5;
     border-right: 1px solid;
@@ -38,5 +32,11 @@ export default styled(Home)`
 
   .todo-list {
     flex: 7;
+  }
+
+  @media screen and (min-width: 1024px) {
+    .new-task {
+      display: block;
+    }
   }
 `;

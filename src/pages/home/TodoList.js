@@ -2,6 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import Button from "../../components/Button";
 import Input from "../../components/Input";
+import Modal from "../../components/Modal";
+import TaskForm from "./components/TaskForm";
+import TaskFormModal from "./components/TaskFormModal";
 import TodoItem from "./components/TodoItem";
 
 const todos = [
@@ -27,11 +30,12 @@ function TodoList({ className }) {
       <div className="list-wrapper">
         <div className="list-header">
           <h2>To do List</h2>
-          <Input placeholder="Search ..." />
+          <TaskFormModal />
         </div>
+        <Input placeholder="Search ..." />
         <div className="list">
           {todos.map((todo) => (
-            <TodoItem todo={todo} />
+            <TodoItem key={todo.id} todo={todo} />
           ))}
         </div>
       </div>
@@ -56,6 +60,17 @@ export default styled(TodoList)`
     flex-direction: column;
   }
 
+  .list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+
+    > button {
+      width: min-content;
+    }
+  }
+
   .list > * + * {
     margin-top: 20px;
   }
@@ -74,6 +89,21 @@ export default styled(TodoList)`
   @media screen and (min-width: 640px) {
     .list-wrapper {
       padding: 40px;
+    }
+  }
+
+  @media screen and (min-width: 1024px) {
+    .list-header {
+      display: block;
+      margin: 0;
+      button {
+        display: none;
+      }
+
+      h2 {
+        text-align: center;
+        margin: 0 0 50px;
+      }
     }
   }
 `;

@@ -10,6 +10,7 @@ const Button = styled.button`
   cursor: pointer;
   transition: .1s ease-in-out;
   width: 100%;
+  white-space: nowrap;
 
   :active {
     opacity: 0.7;
