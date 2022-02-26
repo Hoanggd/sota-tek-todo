@@ -6,7 +6,7 @@ function NewTask({ className }) {
   return (
     <div className={className}>
       <h2>New Task</h2>
-      <TaskForm />
+      <TaskForm onSubmit={(e) => console.log(e)} />
     </div>
   );
 }

@@ -1,28 +1,50 @@
 import React from "react";
+import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import Button from "../../../components/Button";
-import Input, { Label } from "../../../components/Input";
+import Input, { ErrorMessage, Label } from "../../../components/Input";
 import Select from "../../../components/Select";
 import Textarea from "../../../components/Textarea";
 import { Priorities, Priority } from "../../../constants/priority";
+import dayjs from "dayjs";
 
-function TaskForm({ className }) {
+function TaskForm({ className, onSubmit, defaultValues }) {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ defaultValues });
+  console.log("🚀 ~ TaskForm ~ errors", errors);
+
   return (
-    <div className={className}>
+    <form className={className} onSubmit={handleSubmit(onSubmit)}>
       <div className="form-field">
-        <Input style={{ borderRadius: "4px" }} placeholder="Add new task..." />
+        <Input
+          {...register("title")}
+          style={{ borderRadius: "4px" }}
+          placeholder="Add new task..."
+          required
+        />
         <div>
           <Label>Description</Label>
-          <Textarea></Textarea>
+          <Textarea {...register("description")}></Textarea>
         </div>
         <div className="date-priority">
           <div>
             <Label>Due Date</Label>
-            <Input type="date" />
+            <Input
+              defaultValue={dayjs().format("YYYY-MM-DD")}
+              {...register("dueDate", {
+                validate: (value) =>
+                  dayjs(value).isSameOrAfter(dayjs().startOf("d")) || "Due Date is not valid",
+              })}
+              type="date"
+            />
+            {errors.dueDate && <ErrorMessage>{errors.dueDate.message}</ErrorMessage>}
           </div>
           <div>
             <Label>Priority</Label>
-            <Select defaultValue={Priority.Normal}>
+            <Select {...register("priority")} defaultValue={Priority.Normal}>
               {Priorities.map((item) => (
                 <option key={item} value={item.value}>
                   {item.label}
@@ -33,7 +55,7 @@ function TaskForm({ className }) {
         </div>
       </div>
       <Button>Add</Button>
-    </div>
+    </form>
   );
 }
 
@@ -53,6 +75,6 @@ export default styled(TaskForm)`
   .date-priority {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 30px
+    gap: 30px;
   }
 `;

@@ -21,4 +21,10 @@ export const Label = styled.label`
   display: block;
 `
 
+export const ErrorMessage = styled.p`
+  font-size: 14px;
+  color: red;
+  margin: 5px 0 0 0;
+`
+
 export default Input
