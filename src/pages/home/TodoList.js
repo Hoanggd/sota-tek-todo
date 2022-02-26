@@ -2,13 +2,25 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Button from "../../components/Button";
 import Input from "../../components/Input";
-import { useTasks } from "../../utils/localStorage";
+import { useRemoveManyTask, useTasks } from "../../utils/localStorage";
 import TaskFormModal from "./components/TaskFormModal";
 import TodoItem from "./components/TodoItem";
 
 function TodoList({ className }) {
   const [search, setSearch] = useState("");
   const tasks = useTasks(search).data;
+  const [selectedTasks, setSelectedTasks] = useState([]);
+  const removeManyTask = useRemoveManyTask();
+
+  const handleSelectedTasks = (v) => {
+    let newSelectedTasks;
+    if (v.checked) {
+      newSelectedTasks = [...selectedTasks, v.id];
+    } else {
+      newSelectedTasks = selectedTasks.filter((item) => item !== v.id);
+    }
+    setSelectedTasks(newSelectedTasks);
+  };
 
   return (
     <div className={className}>
@@ -23,12 +35,24 @@ function TodoList({ className }) {
           placeholder="Search ..."
         />
         <div className="list">
-          {tasks && tasks.map((todo) => <TodoItem key={todo.id} todo={todo} />)}
+          {tasks &&
+            tasks.map((todo) => (
+              <TodoItem
+                key={todo.id}
+                todo={todo}
+                onChange={handleSelectedTasks}
+              />
+            ))}
         </div>
       </div>
       <div className="bulk-actions">
-        <span>Bulk Action:</span>
-        <Button className="bg-red">Remove</Button>
+        <span>Bulk Action: {selectedTasks.length}</span>
+        <Button
+          onClick={() => removeManyTask.mutate(selectedTasks)}
+          className="bg-red"
+        >
+          Remove
+        </Button>
       </div>
     </div>
   );

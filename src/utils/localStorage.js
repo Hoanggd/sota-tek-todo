@@ -10,7 +10,12 @@ const setData = (key, data) => localStorage.setItem(key, JSON.stringify(data));
 // CRUD
 const getTasks = (search) => {
   const tasks = getData(taskKey);
-  const filteredTasks = tasks.filter((item) => {
+  const sortedTasks = tasks.sort((a, b) => {
+    const timeA = new Date(a.dueDate).getTime();
+    const timeB = new Date(b.dueDate).getTime();
+    return timeA - timeB;
+  });
+  const filteredTasks = sortedTasks.filter((item) => {
     const keyword = search.toLowerCase();
     const title = item.title.toLowerCase();
     return title.includes(keyword);
@@ -50,7 +55,7 @@ const removeTask = (id) => {
 const removeManyTask = (ids) => {
   const tasks = getData(taskKey);
   const newTasks = tasks.filter((task) => !ids.includes(task.id));
-  return newTasks;
+  setData(taskKey, newTasks);
 };
 
 // Hooks
@@ -90,4 +95,10 @@ const useRemoveManyTask = () => {
   });
 };
 
-export { useTasks, useCreatTask, useUpdateTask, useRemoveTask, useRemoveManyTask };
+export {
+  useTasks,
+  useCreatTask,
+  useUpdateTask,
+  useRemoveTask,
+  useRemoveManyTask,
+};

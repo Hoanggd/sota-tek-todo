@@ -5,7 +5,7 @@ import Checkbox from "../../../components/Checkbox";
 import { useRemoveTask, useUpdateTask } from "../../../utils/localStorage";
 import TaskForm from "./TaskForm";
 
-function TodoItem({ className, todo }) {
+function TodoItem({ className, todo, onChange }) {
   const [isShowDetail, setIsShowDetail] = useState(false);
   const removeTask = useRemoveTask();
   const updateTask = useUpdateTask();
@@ -16,8 +16,16 @@ function TodoItem({ className, todo }) {
     <div className={className}>
       <div className="item">
         <div className="title">
-          <Checkbox />
-          <span>{todo.title}</span>
+          <Checkbox
+            id={todo.id}
+            onChange={(e) => {
+              onChange?.({
+                id: todo.id,
+                checked: e.target.checked,
+              });
+            }}
+          />
+          <label htmlFor={todo.id}>{todo.title}</label>
         </div>
         <div className="button-group">
           <Button className="bg-teal" onClick={toggleDetail}>

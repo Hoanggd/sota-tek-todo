@@ -4,12 +4,12 @@ import { useCreatTask } from "../../utils/localStorage";
 import TaskForm from "./components/TaskForm";
 
 function NewTask({ className }) {
-  const createTask = useCreatTask()
-  
+  const createTask = useCreatTask();
+
   return (
     <div className={className}>
       <h2>New Task</h2>
-      <TaskForm onSubmit={(v) => createTask.mutate(v)} />
+      <TaskForm isReset onSubmit={(v) => createTask.mutate(v)} />
     </div>
   );
 }

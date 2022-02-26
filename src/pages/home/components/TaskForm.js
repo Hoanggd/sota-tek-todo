@@ -8,15 +8,29 @@ import Textarea from "../../../components/Textarea";
 import { Priorities, Priority } from "../../../constants/priority";
 import dayjs from "dayjs";
 
-function TaskForm({ className, onSubmit, defaultValues, submitText = "Add" }) {
+function TaskForm({
+  className,
+  onSubmit,
+  defaultValues,
+  submitText = "Add",
+  isReset,
+}) {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({ defaultValues });
 
+  const submitAndReset = (v) => {
+    onSubmit?.(v);
+    if (isReset) {
+      reset();
+    }
+  };
+
   return (
-    <form className={className} onSubmit={handleSubmit(onSubmit)}>
+    <form className={className} onSubmit={handleSubmit(submitAndReset)}>
       <div className="form-field">
         <Input
           {...register("title")}

@@ -6,7 +6,7 @@ const Input = styled.input`
   border: 1px solid #bbb;
   width: 100%;
   font-family: sans-serif;
-  height: 36px;
+  min-height: 36px;
 
   :focus {
     outline: none;
