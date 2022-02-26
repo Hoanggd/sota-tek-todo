@@ -1,28 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Button from "../../components/Button";
 import Input from "../../components/Input";
+import { useTasks } from "../../utils/localStorage";
 import TaskFormModal from "./components/TaskFormModal";
 import TodoItem from "./components/TodoItem";
 
-const todos = [
-  {
-    id: 1,
-    title: "Do home work",
-    description: "abc xys",
-    dueDate: "2022-02-01",
-    priority: "normal",
-  },
-  {
-    id: 2,
-    title: "play games",
-    description: "yaosu gank team",
-    dueDate: "2022-02-01",
-    priority: "high",
-  },
-];
-
 function TodoList({ className }) {
+  const [search, setSearch] = useState("");
+  const tasks = useTasks(search).data;
+
   return (
     <div className={className}>
       <div className="list-wrapper">
@@ -30,11 +17,13 @@ function TodoList({ className }) {
           <h2>To do List</h2>
           <TaskFormModal />
         </div>
-        <Input placeholder="Search ..." />
+        <Input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search ..."
+        />
         <div className="list">
-          {todos.map((todo) => (
-            <TodoItem key={todo.id} todo={todo} />
-          ))}
+          {tasks && tasks.map((todo) => <TodoItem key={todo.id} todo={todo} />)}
         </div>
       </div>
       <div className="bulk-actions">

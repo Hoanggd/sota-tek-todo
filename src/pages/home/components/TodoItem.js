@@ -2,10 +2,13 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Button from "../../../components/Button";
 import Checkbox from "../../../components/Checkbox";
+import { useRemoveTask, useUpdateTask } from "../../../utils/localStorage";
 import TaskForm from "./TaskForm";
 
 function TodoItem({ className, todo }) {
   const [isShowDetail, setIsShowDetail] = useState(false);
+  const removeTask = useRemoveTask();
+  const updateTask = useUpdateTask();
 
   const toggleDetail = () => setIsShowDetail(!isShowDetail);
 
@@ -20,12 +23,18 @@ function TodoItem({ className, todo }) {
           <Button className="bg-teal" onClick={toggleDetail}>
             Detail
           </Button>
-          <Button className="bg-red">Remove</Button>
+          <Button onClick={() => removeTask.mutate(todo.id)} className="bg-red">
+            Remove
+          </Button>
         </div>
       </div>
       {isShowDetail && (
         <div className="detail">
-          <TaskForm />
+          <TaskForm
+            submitText="Update"
+            defaultValues={todo}
+            onSubmit={(v) => updateTask.mutate(v)}
+          />
         </div>
       )}
     </div>

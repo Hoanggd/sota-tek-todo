@@ -8,13 +8,12 @@ import Textarea from "../../../components/Textarea";
 import { Priorities, Priority } from "../../../constants/priority";
 import dayjs from "dayjs";
 
-function TaskForm({ className, onSubmit, defaultValues }) {
+function TaskForm({ className, onSubmit, defaultValues, submitText = "Add" }) {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({ defaultValues });
-  console.log("🚀 ~ TaskForm ~ errors", errors);
 
   return (
     <form className={className} onSubmit={handleSubmit(onSubmit)}>
@@ -36,11 +35,14 @@ function TaskForm({ className, onSubmit, defaultValues }) {
               defaultValue={dayjs().format("YYYY-MM-DD")}
               {...register("dueDate", {
                 validate: (value) =>
-                  dayjs(value).isSameOrAfter(dayjs().startOf("d")) || "Due Date is not valid",
+                  dayjs(value).isSameOrAfter(dayjs().startOf("d")) ||
+                  "Due Date is not valid",
               })}
               type="date"
             />
-            {errors.dueDate && <ErrorMessage>{errors.dueDate.message}</ErrorMessage>}
+            {errors.dueDate && (
+              <ErrorMessage>{errors.dueDate.message}</ErrorMessage>
+            )}
           </div>
           <div>
             <Label>Priority</Label>
@@ -54,7 +56,7 @@ function TaskForm({ className, onSubmit, defaultValues }) {
           </div>
         </div>
       </div>
-      <Button>Add</Button>
+      <Button>{submitText}</Button>
     </form>
   );
 }

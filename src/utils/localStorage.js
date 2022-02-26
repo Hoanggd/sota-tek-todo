@@ -1,17 +1,33 @@
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { LocalStorageKey } from "../constants/localStorage";
+import { v4 as uuidv4 } from "uuid";
 
 const taskKey = LocalStorageKey.Task;
 
-const getData = (key) => JSON.parse(localStorage.getItem(key) || []);
+const getData = (key) => JSON.parse(localStorage.getItem(key) || null) || [];
 const setData = (key, data) => localStorage.setItem(key, JSON.stringify(data));
 
 // CRUD
-const getTasks = () => {};
+const getTasks = (search) => {
+  const tasks = getData(taskKey);
+  const filteredTasks = tasks.filter((item) => {
+    const keyword = search.toLowerCase();
+    const title = item.title.toLowerCase();
+    return title.includes(keyword);
+  });
+  return filteredTasks;
+};
 
 const createTask = (task) => {
   const tasks = getData(taskKey);
-  const newTasks = [...tasks, task];
-  setData(newTasks);
+  const newTasks = [
+    ...tasks,
+    {
+      ...task,
+      id: uuidv4(),
+    },
+  ];
+  setData(taskKey, newTasks);
 };
 
 const updateTask = (newTask) => {
@@ -22,13 +38,56 @@ const updateTask = (newTask) => {
     }
     return task;
   });
-  setData(newTasks);
+  setData(taskKey, newTasks);
 };
 
 const removeTask = (id) => {
   const tasks = getData(taskKey);
   const newTasks = tasks.filter((task) => task.id !== id);
-  setData(newTasks);
+  setData(taskKey, newTasks);
 };
 
-export { getTasks, createTask, updateTask, removeTask };
+const removeManyTask = (ids) => {
+  const tasks = getData(taskKey);
+  const newTasks = tasks.filter((task) => !ids.includes(task.id));
+  return newTasks;
+};
+
+// Hooks
+const queryKey = "tasks";
+
+const useTasks = (search) => {
+  return useQuery([queryKey, search], () => getTasks(search), {
+    staleTime: Infinity,
+  });
+};
+
+const useCreatTask = () => {
+  const queryClient = useQueryClient();
+  return useMutation(createTask, {
+    onSuccess: () => queryClient.invalidateQueries(queryKey),
+  });
+};
+
+const useUpdateTask = () => {
+  const queryClient = useQueryClient();
+  return useMutation(updateTask, {
+    onSuccess: () => queryClient.invalidateQueries(queryKey),
+  });
+};
+
+const useRemoveTask = () => {
+  const queryClient = useQueryClient();
+  return useMutation(removeTask, {
+    onSuccess: () => queryClient.invalidateQueries(queryKey),
+  });
+};
+
+const useRemoveManyTask = () => {
+  const queryClient = useQueryClient();
+  return useMutation(removeManyTask, {
+    onSuccess: () => queryClient.invalidateQueries(queryKey),
+  });
+};
+
+export { useTasks, useCreatTask, useUpdateTask, useRemoveTask, useRemoveManyTask };
