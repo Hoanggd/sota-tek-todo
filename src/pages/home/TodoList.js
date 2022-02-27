@@ -22,6 +22,11 @@ function TodoList({ className }) {
     setSelectedTasks(newSelectedTasks);
   };
 
+  const handleBulkRemove = () => {
+    removeManyTask.mutate(selectedTasks);
+    setSelectedTasks([])
+  };
+
   return (
     <div className={className}>
       <div className="list-wrapper">
@@ -47,10 +52,7 @@ function TodoList({ className }) {
       </div>
       <div className="bulk-actions">
         <span>Bulk Action: {selectedTasks.length}</span>
-        <Button
-          onClick={() => removeManyTask.mutate(selectedTasks)}
-          className="bg-red"
-        >
+        <Button onClick={handleBulkRemove} className="bg-red">
           Remove
         </Button>
       </div>
