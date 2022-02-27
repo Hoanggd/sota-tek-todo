@@ -62,7 +62,7 @@ function TaskForm({
             <Label>Priority</Label>
             <Select {...register("priority")} defaultValue={Priority.Normal}>
               {Priorities.map((item) => (
-                <option key={item} value={item.value}>
+                <option key={item.value} value={item.value}>
                   {item.label}
                 </option>
               ))}
